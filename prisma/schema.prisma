@@ -46,13 +46,24 @@ model Domain {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
   conferenceId String     @db.ObjectId
   conference   Conference @relation(fields: [conferenceId], references: [id])
-  papers       Papers[]
-} 
+  submission   Submission[]
+}
 
-model Papers {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  Status   SubmissionStatus @default(Pending)
+model Submission {
+  id     String           @id @default(auto()) @map("_id") @db.ObjectId
+  Status SubmissionStatus @default(Pending)
 
   domainId String @db.ObjectId
   domain   Domain @relation(fields: [domainId], references: [id])
+
+  filesMeataData FilesMetaData[]
+}
+
+model FilesMetaData {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  filename String
+  ext      String
+
+  submissionId String @db.ObjectId
+  submission  Submission @relation(fields: [submissionId], references: [id])
 }
