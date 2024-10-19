@@ -56,10 +56,10 @@ model Submission {
   domainId String @db.ObjectId
   domain   Domain @relation(fields: [domainId], references: [id])
 
-  filesMeataData FilesMetaData[]
+  fileMeataData FileMetaData[]
 }
 
-model FilesMetaData {
+model FileMetaData {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   filename String
   ext      String
