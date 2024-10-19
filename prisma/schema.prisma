@@ -14,6 +14,12 @@ enum Roles {
   Author
 }
 
+enum SubmissionStatus {
+  Accepted
+  Rejected
+  Pending
+}
+
 model User {
   id       String           @id @default(auto()) @map("_id") @db.ObjectId
   username String
@@ -45,6 +51,8 @@ model Domain {
 
 model Papers {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
+  Status   SubmissionStatus @default(Pending)
+
   domainId String @db.ObjectId
   domain   Domain @relation(fields: [domainId], references: [id])
 }
