@@ -21,14 +21,35 @@ enum SubmissionStatus {
 }
 
 model User {
-  id       String           @id @default(auto()) @map("_id") @db.ObjectId
-  username String
-  roles    RolesConnector[]
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  username          String
+  email             String @unique @db.String
+  password          String @db.String
+  first_name        String @db.String
+  last_name         String @db.String
+  organization_name String @db.String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  roles RolesConnector[]
 }
 
 model Conference {
-  id     String           @id @default(auto()) @map("_id") @db.ObjectId
-  name   String
+  id                        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                      String
+  description               String
+  country                   String   @db.String
+  state                     String   @db.String
+  start_date                DateTime @db.Timestamp
+  end_date                  DateTime @db.Timestamp
+  paper_submission_due_date DateTime @db.Timestamp
+  enternal_conf_URL         String   @db.String
+  created_by                String   @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   roles  RolesConnector[]
   domain Domain[]
 }
@@ -43,14 +64,26 @@ model RolesConnector {
 }
 
 model Domain {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  conferenceId String     @db.ObjectId
-  conference   Conference @relation(fields: [conferenceId], references: [id])
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  conferenceId String       @db.ObjectId
+  conference   Conference   @relation(fields: [conferenceId], references: [id])
   submission   Submission[]
 }
 
 model Submission {
-  id     String           @id @default(auto()) @map("_id") @db.ObjectId
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  from_domain String @db.String
+  title       String @db.String
+  abstract    String @db.String
+  contact     String @db.String
+  country     String @db.String
+  state       String @db.String
+  comment     String @db.String
+  email       String @db.String
+
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @updatedAt @db.Timestamp
+
   Status SubmissionStatus @default(Pending)
 
   domainId String @db.ObjectId
@@ -64,6 +97,6 @@ model FileMetaData {
   filename String
   ext      String
 
-  submissionId String @db.ObjectId
-  submission  Submission @relation(fields: [submissionId], references: [id])
+  submissionId String     @db.ObjectId
+  submission   Submission @relation(fields: [submissionId], references: [id])
 }
